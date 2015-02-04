@@ -1,8 +1,5 @@
-LIBRARY IEEE;
-USE IEEE.STD_LOGIC_1164.ALL;
-
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
 
 ENTITY fa_cla IS 
 	PORT( a, b, cin : in STD_LOGIC;

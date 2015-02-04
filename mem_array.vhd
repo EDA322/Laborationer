@@ -15,7 +15,7 @@ ENTITY mem_array IS
 END mem_array;
 
 ARCHITECTURE behavioral OF mem_array IS
-Type MEMORY_ARRAY is ARRAY (0 to 2**(ADDR_WIDTH)-1) of STD_LOGIC_VECTOR(DATA_WIDTH-1 DOWNTO 0);
+Type MEMORY_ARRAY is ARRAY (0 to 2**ADDR_WIDTH-1) of STD_LOGIC_VECTOR(DATA_WIDTH-1 DOWNTO 0);
 impure function init_memory_wfile(mif_file_name : in string) return MEMORY_ARRAY is
     file mif_file : text open read_mode is mif_file_name;
     variable mif_line : line;

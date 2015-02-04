@@ -8,7 +8,7 @@ ENTITY alu_wCLA IS
 	      Carry, NotEq, Eq, isOutZero : out STD_LOGIC);
 END alu_wCLA;
 
-ARCHITECTURE alu_structure OF alu_wRCA IS
+ARCHITECTURE alu_structure OF alu_wCLA IS
 
 -- Operation Outputs
 SIGNAL add_out  : STD_LOGIC_VECTOR(7 downto 0);
@@ -44,7 +44,10 @@ BEGIN
 	not_out <= NOT ALU_inA;
 -- ADD and SUB
 	sub <= Operation(0);
-	bsignal <= (ALU_inB(7) XOR sub)& (ALU_inB(6) XOR sub)& (ALU_inB(5) XOR sub)& (ALU_inB(4) XOR sub)& (ALU_inB(3) XOR sub)& (ALU_inB(2) XOR sub)& (ALU_inB(1) XOR sub)& (ALU_inB(0) XOR sub); 
+	bsignal <= (ALU_inB(7) XOR sub) & (ALU_inB(6) XOR sub) &
+		   (ALU_inB(5) XOR sub) & (ALU_inB(4) XOR sub) &
+		   (ALU_inB(3) XOR sub) & (ALU_inB(2) XOR sub) &
+		   (ALU_inB(1) XOR sub) & (ALU_inB(0) XOR sub); 
 	cla_8bit : cla port map (ALU_inA, bsignal, sub, cla_out, Carry);
 	add_out <= cla_out;
 	sub_out <= cla_out;

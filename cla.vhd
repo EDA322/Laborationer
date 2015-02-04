@@ -12,9 +12,9 @@ END cla;
 ARCHITECTURE structure OF cla IS
 
 -- Internal signals
-SIGNAL couts: STD_LOGIC_VECTOR(6 DOWNTO 0);
-SIGNAL G: STD_LOGIV_VECTOR(7 DOWNTO 0);
-SIGNAL P: STD_LOGIV_VECTOR(7 DOWNTO 0);
+SIGNAL couts: STD_LOGIC_VECTOR(7 DOWNTO 0);
+SIGNAL G: STD_LOGIC_VECTOR(7 DOWNTO 0);
+SIGNAL P: STD_LOGIC_VECTOR(7 DOWNTO 0);
 
 -- Components
 COMPONENT fa_cla
@@ -30,7 +30,7 @@ END COMPONENT;
 
 BEGIN
 -- Full-adders
-	fa_0: fa_cla PORT MAP (a(0) => a, b(0) => b, cin => cin, s(0) => s, G(0) => g, P(0) => p);
+	fa_0: fa_cla PORT MAP (a => a(0), b => b(0), cin => cin, s => s(0), g => G(0), p => P(0));
 	fa_1: fa_cla PORT MAP (a(1), b(1), couts(0), s(1), G(1), P(1));
 	fa_2: fa_cla PORT MAP (a(2), b(2), couts(1), s(2), G(2), P(2));
 	fa_3: fa_cla PORT MAP (a(3), b(3), couts(2), s(3), G(3), P(3));
@@ -42,4 +42,4 @@ BEGIN
 	clu: clu_8b PORT MAP (G => G, P => P, cin => cin, couts => couts); 
 -- Carry out
 	cout <= couts(7);
-END dataflow;
+END structure;
