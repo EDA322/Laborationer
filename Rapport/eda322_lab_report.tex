@@ -1,6 +1,9 @@
 \documentclass[a4,11pt]{article}
 
 \usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{rotating}
+\usepackage{array,multirow,multicol}
 \usepackage[labelfont=bf]{caption}
 \usepackage{subcaption}
 \usepackage{fancyhdr}
@@ -117,8 +120,14 @@ signal to it's corresponding operation, and then sending the signal to the outpu
 Describe what you did in lab 3. In addition, describe how you implemented the bus using the mux and any extra logic or the tri-state buffers. Describe briefly how you implemented the storage elements that are used by the ChAcc processor. Show one snapshot of the simulation waveform where you write something to a memory location and then read from it. Remember to always explain your design choices and mention any assumptions. Finally, make use of figures and tables. 
 
 \subsection{Controller}
-(max: 2 pages)
-\\\\
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=.5\textwidth]{Figurer/procController_FSM_Mealy}
+	\caption{The {\it Final State Machine} of the processor's controller.}
+	\label{fig:fsm}
+\end{figure}
+
 Describe what you did in lab4. More specifically, show the \emph{Finite-state machine} (FSM) of the controller by presenting the diagram you drew. Which design decisions did you make and why? Also include few waveforms, where you show that the controller runs correctly for some particular instructions using the provided testbench. Remember to always explain your design choices and mention any assumptions. Finally, make use of figures and tables. 
 
 \subsection{Processor's Testbench}
