@@ -27,7 +27,7 @@ end procController;
 
 architecture behavioral of procController is
 type state is (FE, DE, DE_2, EX, ME);
-signal mealy_state: state 					  := FE;
+signal mealy_state: state 					  := EX;
 signal control: std_logic_vector(15 downto 0) := (others => '0');
 
 function nextState(currentState: in state; op: in std_logic_vector(3 downto 0))
@@ -36,11 +36,13 @@ function nextState(currentState: in state; op: in std_logic_vector(3 downto 0))
 	if currentState = FE then
 		return DE;
 	elsif currentState = DE then
-		if ((op(3) and op(2) and not op(1)) or (op(2) xor op(0))) = '1' then
+		if ((op(3) and op(2) and not op(1))
+				or (op(3) and op(1) and (op(2) xor op(0)))) = '1' then
 			return FE;
 		elsif (op(3) and not op(2) and not (op(1) and op(0))) = '1' then
 			return DE_2;
-		elsif ((not op(3) and not (op(2) and op(1))) or (op(3) xor not op(0))) ='1' then
+		elsif ((not op(3) and not (op(2) and op(1)))
+				or (op(2) and op(1) and (op(3) xor not op(0)))) ='1' then
 			return EX;
 		elsif op = "0111" then
 			return ME;
@@ -60,7 +62,7 @@ begin
 combinatorial: process(CLK, ARESETN)
 begin
 	if ARESETN = '0' then
-		mealy_state <= FE;
+		mealy_state <= EX;
 	elsif rising_edge(CLK) then
 		if master_load_enable = '1' then
 			mealy_state <= nextState(mealy_state, opcode);
@@ -91,10 +93,12 @@ begin
    			if (op = "1011") then
    				control(3) <= '1';	-- ext2bus
 			end if;
-   			if ((op(2) and not op(1)) or (op(2) xor op(0))) = '1' then
+   			if ((op(2) and not op(1))
+   					or (not op(3) and op(1) and op(0))) = '1' then
 	   			control(1) <= '1';	-- aluMd(1)
    			end if;
-   			if ((op(2) and not op(1)) or (op(2) xor not op(0))) = '1' then
+   			if ((op(2) and not op(1))
+   					or (not op(3) and op(1) and not op(0))) = '1' then
 	   			control(0) <= '0';	-- aluMd(0)
    			end if;
    			-- Decode state
@@ -104,7 +108,7 @@ begin
 	   				control(15) <= '1';	-- pcSel
 				end if;
    				if ((op(3) and op(2) and not op(1))
-   						or (op(2) xor op(0))) = '1' then
+   						or (op(3) and op(1) and (op(2) xor op(0)))) = '1' then
 	   				control(14) <= '1';	-- pcLd
 				end if;   		
    				if (op = "1011") then
@@ -127,7 +131,7 @@ begin
    				if (not (op(3) and op(2) and not op(1))
    						and not (op(3) and not op(2) and op(1))
    						and not (op(3) and op(1) and not op(0))
-   						and (op(3) xor not op(0))) = '1' then
+   						and not (not op(3) and op(2) and op(1) and op(0))) = '1' then
 	   				control(14) <= '1';	-- pcLd
    				end if;
    				if (not (op(3) or op(1)) or not (op(3) or op(2))
