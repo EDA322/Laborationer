@@ -76,14 +76,13 @@ begin
 	for i in 0 to 3 loop
 		op(i) := opcode(i);
 	end loop;
-	
 	if ARESETN='0' then
 		control <= (others => '0');
 	elsif rising_edge(CLK) then
    		if master_load_enable = '1' then
    			-- All states
    			control <= (others => '0');
-   			control(13) <= '1';	-- instrLd
+   			control(13) <= '1';		-- instrLd
    			if (op(3) and op(2) and not (op(1) and op(0))) = '1' then
  	  			control(6) <= '1';	-- im2bus
    			end if;
@@ -98,13 +97,13 @@ begin
 	   			control(1) <= '1';	-- aluMd(1)
    			end if;
    			if ((op(2) and not op(1))
-   					or (not op(3) and op(1) and not op(0))) = '1' then
-	   			control(0) <= '0';	-- aluMd(0)
+   					or (op(1) and not op(0))) = '1' then
+	   			control(0) <= '1';	-- aluMd(0)
    			end if;
    			-- Decode state
    			if nextState(mealy_state, opcode) = DE then
-   				if (op = "1100" or (op = "1101" and eq = '1')
-   						or (op = "1110" and neq = '1')) then
+   				if (op = "1100" or ((op = "1101") and (eq = '1'))
+   						or ((op = "1110") and (neq = '1'))) then
 	   				control(15) <= '1';	-- pcSel
 				end if;
    				if ((op(3) and op(2) and not op(1))
@@ -157,6 +156,9 @@ begin
    				if (op = "0111" or op = "1010") then
 	   				control(14) <= '1';	-- pcLd
    				end if;
+   				if (op = "1010") then
+	   				control(12) <= '1';	-- addrMd
+   				end if;
    				if (op = "0111" or op = "1010") then
 	   				control(11) <= '1';	-- dmWr
    				end if;
@@ -164,7 +166,6 @@ begin
    	  	end if;
   	end if;
 end process;
-
 
 	pcSel 	<= control(15);
 	pcLd 	<= control(14);
