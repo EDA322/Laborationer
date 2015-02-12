@@ -116,23 +116,37 @@ signal to it's corresponding operation, and then sending the signal to the outpu
 
 \subsection{Top-level Design}
 
-The top-level design consists of a number of components, such as registers, memory units, alu's and multiplexers. What we did was to design these components and then in the end, we connected them with each other in the data path.
+The top-level design consists of a number of components, such as registers, memory units, ALU's
+and multiplexers. What we did was to design these components and then in the end, we connected
+them with each other in the data path.
 
-The register is implemented using a D-flip-flop and a multiplexer for the load enable signal. The register is implemented generically so that words of any size can be stored into the flip-flop. The memory unit consists of an arbitrary number of registers, also using generic implementation. It can be initiated with a data vector file, so simulaton becomes easier.
-
-The bus is implemented using a 4-to-1-multiplexer rather than using tri-state buffers. In this way, no signals can overload, but there may be multiple select signals avtive. For this we have the error (ERR) signal, that activates when when at least two select signals are active. The select signal for the multiplexer and the error signal are implemented using dataflow, where minimizations of the boolean expressions have been made (see Fig.~\ref{fig:enc}).
+The register is implemented using a D-flip-flop and a 2-to-1 multiplexer. The {\it WE} is the select
+signal for the multiplexer and it chooses what should be stored in the flip-flop, which is either
+the already stored data or the input data ({\it DATA\_IN}). The register is implemented
+generically so that words of any size can be stored. The memory unit consists of an arbitrary number
+of registers, also using generic implementation. In the following picture, we can see what happens
+when we read and write data to a memory unit:
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=.5\textwidth]{Figurer/enc4b}
-	\caption{The minimized gate logic for the select signals}
-	\label{fig:enc}
+	\includegraphics[width=1\textwidth]{Figurer/data_memory.png}
+	\label{fig:sim}
 \end{figure}
 
+The memory is initially stored with the value `0' (or ``000000000000'' in binary) in address `0'.
+{\it WE} is also low, which means writing is disabled. When {\it WE} becomes active, the word
+``110011001100'' is stored at the next rising edge of the clock ({\it CLK}) signal.
+
+The bus is implemented using a 4-to-1-multiplexer rather than using tri-state buffers. In this
+way, no signals can overload, but there may be multiple select signals active. For this we have
+the error signal ({\it ERR}), that activates when at least two select signals are active. The
+select signal for the multiplexer and the {\it ERR}-signal are implemented using data flow, where
+minimizations of the boolean expressions have been made (see Figure~\ref{fig:enc}).
+
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=.5\textwidth]{Figurer/data instruction}
-	\caption{A simulation waveform when writing and reading data of a memory unit.}
+	\includegraphics[width=.3\textwidth]{Figurer/enc4b}
+	\caption{The minimized gate logic for the select signals of the bus multiplexer.}
 	\label{fig:enc}
 \end{figure}
 
@@ -140,7 +154,7 @@ The bus is implemented using a 4-to-1-multiplexer rather than using tri-state bu
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[height=.5\textwidth]{Figurer/procController_FSM_Mealy}
+	\includegraphics[width=0.5\textwidth]{Figurer/procController_FSM_Mealy}
 	\caption{The {\it Final State Machine} of the processor's controller.}
 	\label{fig:fsm}
 \end{figure}
