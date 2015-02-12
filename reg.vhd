@@ -28,7 +28,7 @@ BEGIN
 mux : mux2to1 generic map(width => width)
 	      port map (w1 => reg_out, w2 => input, f => reg_in, sel => loadEnable);
 
-PROCESS( ARESETN, CLK)
+PROCESS(ARESETN, CLK)
 BEGIN
 	IF ARESETN = '0' then
 		reg_out <= (OTHERS => '0');

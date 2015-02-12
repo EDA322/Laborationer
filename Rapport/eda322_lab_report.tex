@@ -115,9 +115,26 @@ signal to it's corresponding operation, and then sending the signal to the outpu
 \newpage
 
 \subsection{Top-level Design}
-(max: 2 pages)
-\\\\
-Describe what you did in lab 3. In addition, describe how you implemented the bus using the mux and any extra logic or the tri-state buffers. Describe briefly how you implemented the storage elements that are used by the ChAcc processor. Show one snapshot of the simulation waveform where you write something to a memory location and then read from it. Remember to always explain your design choices and mention any assumptions. Finally, make use of figures and tables. 
+
+The top-level design consists of a number of components, such as registers, memory units, alu's and multiplexers. What we did was to design these components and then in the end, we connected them with each other in the data path.
+
+The register is implemented using a D-flip-flop and a multiplexer for the load enable signal. The register is implemented generically so that words of any size can be stored into the flip-flop. The memory unit consists of an arbitrary number of registers, also using generic implementation. It can be initiated with a data vector file, so simulaton becomes easier.
+
+The bus is implemented using a 4-to-1-multiplexer rather than using tri-state buffers. In this way, no signals can overload, but there may be multiple select signals avtive. For this we have the error (ERR) signal, that activates when when at least two select signals are active. The select signal for the multiplexer and the error signal are implemented using dataflow, where minimizations of the boolean expressions have been made (see Fig.~\ref{fig:enc}).
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=.5\textwidth]{Figurer/enc4b}
+	\caption{The minimized gate logic for the select signals}
+	\label{fig:enc}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=.5\textwidth]{Figurer/data instruction}
+	\caption{A simulation waveform when writing and reading data of a memory unit.}
+	\label{fig:enc}
+\end{figure}
 
 \subsection{Controller}
 
