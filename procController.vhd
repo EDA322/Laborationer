@@ -2,27 +2,27 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 entity procController is
-    Port ( master_load_enable : in  STD_LOGIC;
-		   opcode 			  : in  STD_LOGIC_VECTOR (3 downto 0);
-		   neq 				  : in  STD_LOGIC;
-		   eq 				  : in  STD_LOGIC; 
-		   CLK 				  : in  STD_LOGIC;
-		   ARESETN 			  : in  STD_LOGIC;
-		   pcSel 			  : out STD_LOGIC;
-		   pcLd 			  : out STD_LOGIC;
-		   instrLd 			  : out STD_LOGIC;
-		   addrMd 			  : out STD_LOGIC;
-		   dmWr 			  : out STD_LOGIC;
-		   dataLd 			  : out STD_LOGIC;
-		   flagLd 			  : out STD_LOGIC;
-		   accSel 			  : out STD_LOGIC;
-		   accLd 			  : out STD_LOGIC;
-		   im2bus 			  : out STD_LOGIC;
-		   dmRd 			  : out STD_LOGIC;
-		   acc2bus 			  : out STD_LOGIC;
-		   ext2bus 			  : out STD_LOGIC;
-		   dispLd			  : out STD_LOGIC;
-		   aluMd 			  : out STD_LOGIC_VECTOR(1 downto 0));
+    port (  master_load_enable  : in  std_logic;
+            opcode              : in  std_logic_vector (3 downto 0);
+            neq 				        : in  std_logic;
+            eq                  : in  std_logic;
+            CLK                 : in  std_logic;
+            ARESETN             : in  std_logic;
+            pcSel               : out std_logic;
+            pcLd                : out std_logic;
+            instrLd             : out std_logic;
+            addrMd              : out std_logic;
+            dmWr                : out std_logic;
+            dataLd              : out std_logic;
+            flagLd              : out std_logic;
+            accSel              : out std_logic;
+            accLd               : out std_logic;
+            im2bus              : out std_logic;
+            dmRd                : out std_logic;
+            acc2bus 			      : out std_logic;
+            ext2bus             : out std_logic;
+            dispLd              : out std_logic;
+            aluMd               : out std_logic_vector(1 downto 0));
 end procController;
 
 architecture behavioral of procController is
@@ -44,8 +44,8 @@ begin
 				and (opcode(1) nand opcode(0))) = '1' then
 			next_state <= DE_2;
 		elsif ((not opcode(3) and (opcode(2) nand opcode(1)))
-				or (opcode(2) and opcode(1)
-					and (opcode(3) xor not opcode(0)))) ='1' then
+      or (opcode(2) and opcode(1)
+				and (opcode(3) xor not opcode(0)))) ='1' then
 			next_state <= EX;
 		elsif opcode = "0111" then
 			next_state <= ME;
@@ -75,7 +75,7 @@ begin
    					and not (opcode(1) and opcode(0))) = '1' then
  	  			control(6) <= '1';	-- im2bus
    			end if;
-   			if (opcode = "0111" or opcode = "1010") then 
+   			if (opcode = "0111" or opcode = "1010") then
 	   			control(4) <= '1';	-- acc2bus
    			end if;
    			if (opcode = "1011") then
@@ -99,7 +99,7 @@ begin
    						or (opcode(3) and opcode(1)
    							and (opcode(2) xor opcode(0)))) = '1' then
 	   				control(14) <= '1';	-- pcLd
-				end if;   		
+				end if;
    				if (opcode = "1011") then
 	   				control(11) <= '1';	-- dmWr
    				end if;
@@ -137,7 +137,7 @@ begin
    						or not (opcode(2) or opcode(1))) = '1' then
 	   				control(7) <= '1';	-- accLd
    				end if;
-   				if (not (opcode(3) and opcode(2)) and not (opcode(3) and opcode(1)) 
+   				if (not (opcode(3) and opcode(2)) and not (opcode(3) and opcode(1))
    						and not (opcode(2) and opcode(1) and opcode(0))) = '1' then
 	   				control(5) <= '1';	-- dmRd
    				end if;
@@ -157,14 +157,14 @@ begin
    				end if;
    			end if;
    	  	end if;
-   	  	
+
    	  	mealy_state <= next_state;
   	end if;
 end process;
 
 	pcSel 	<= control(15);
 	pcLd 	<= control(14);
-	instrLd <= control(13); 
+	instrLd <= control(13);
 	addrMd	<= control(12);
 	dmWr 	<= control(11);
 	dataLd 	<= control(10);
@@ -178,6 +178,3 @@ end process;
 	dispLd 	<= control(2);
 	aluMd 	<= control(1 downto 0);
 end behavioral;
-
-
-

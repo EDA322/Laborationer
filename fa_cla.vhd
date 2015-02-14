@@ -1,16 +1,15 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-ENTITY fa_cla IS 
-	PORT( a, b, cin : in STD_LOGIC;
-	      s, g, p   : out STD_LOGIC);
-END fa_cla;
+entity fa_cla IS
+	port ( 	a, b, cin : in std_logic;
+	      	s, g, p   : out std_logic	);
+end fa_cla;
 
-ARCHITECTURE dataflow OF fa_cla IS
-SIGNAL aplusb: STD_LOGIC;
-BEGIN
-	aplusb <= a XOR b;
-	s <= aplusb XOR cin;
-	g <= a AND b;
+architecture dataflow of fa_cla is
+variable aplusb: std_logic := a xor b;
+begin
+	s <= aplusb xor cin;
+	g <= a and b;
 	p <= aplusb;
-END dataflow;
+end dataflow;

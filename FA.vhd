@@ -1,13 +1,13 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
 
-ENTITY fa IS 
-	PORT( a, b, cin : in STD_LOGIC;
-	      s, cout   : out STD_LOGIC);
-END fa;
+entity fa is
+	port ( 	a, b, cin : in std_logic;
+	      	s, cout   : out std_logic	);
+end fa;
 
-ARCHITECTURE dataflow OF fa IS
-BEGIN
-	s <= a XOR b XOR cin;
-	cout <= (a AND b) OR (a AND cin) OR (b AND cin);
-END dataflow;
+architecture dataflow of fa is
+begin
+	s <= a xor b xor cin;
+	cout <= (a and b) or (a and cin) or (b and cin);
+end dataflow;

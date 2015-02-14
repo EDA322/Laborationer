@@ -1,18 +1,19 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.ALL;
 
-ENTITY cmp IS
-	PORT( a, b : in STD_LOGIC_VECTOR(7 downto 0);
-	      eq, neq : out STD_LOGIC);
-END cmp;
+entity cmp is
+	port ( a, b 	: in std_logic_vector(7 downto 0);
+	      eq, neq : out std_logic	);
+end cmp;
 
-ARCHITECTURE dataflow OF cmp IS
-SIGNAL not_eq : STD_LOGIC;
-BEGIN
-	not_eq <= (a(0) XOR b(0)) OR (a(1) XOR b(1)) OR
-		  (a(2) XOR b(2)) OR (a(3) XOR b(3)) OR
-		  (a(4) XOR b(4)) OR (a(5) XOR b(5)) OR
-		  (a(6) XOR b(6)) OR (a(7) XOR b(7));
-	eq <= NOT not_eq;
+architecture dataflow of cmp is
+signal not_eq 	: std_logic;
+begin
+	not_eq <=
+		(a(0) xor b(0)) or (a(1) xor b(1)) or
+	  (a(2) xor b(2)) or (a(3) xor b(3)) or
+	  (a(4) xor b(4)) or (a(5) xor b(5)) or
+	  (a(6) xor b(6)) or (a(7) xor b(7));
+	eq <= not not_eq;
 	neq <= not_eq;
-END dataflow;
+end dataflow;

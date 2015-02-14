@@ -1,64 +1,72 @@
-library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+library ieee;
+use ieee.std_logic_1164.all;
 
-ENTITY alu_wRCA IS
-	PORT( ALU_inA, ALU_inB : in STD_LOGIC_VECTOR(7 downto 0);
-	      Operation : in STD_LOGIC_VECTOR(1 downto 0);
-	      ALU_out : out STD_LOGIC_VECTOR(7 downto 0);
-	      Carry, NotEq, Eq, isOutZero : out STD_LOGIC);
-END alu_wRCA;
+entity alu_wRCA is
+	port ( 	ALU_inA, ALU_inB 						: in std_logic_vector(7 downto 0);
+	      	Operation 									: in std_logic_vector(1 downto 0);
+	      	ALU_out 										: out std_logic_vector(7 downto 0);
+	      	Carry, NotEq, Eq, isOutZero : out std_logic	);
+end alu_wRCA;
 
-ARCHITECTURE alu_structure OF alu_wRCA IS
+architecture alu_structure of alu_wRCA is
 
 -- Operation Outputs
-SIGNAL add_out : STD_LOGIC_VECTOR(7 downto 0);
-SIGNAL sub_out : STD_LOGIC_VECTOR(7 downto 0);
-SIGNAL nand_out : STD_LOGIC_VECTOR(7 downto 0);
-SIGNAL not_out : STD_LOGIC_VECTOR(7 downto 0);
+signal add_out 		: std_logic_vector(7 downto 0);
+signal sub_out 		: std_logic_vector(7 downto 0);
+signal nand_out 	: std_logic_vector(7 downto 0);
+signal not_out 		: std_logic_vector(7 downto 0);
 
 -- Adder internal signals
-SIGNAL bsignal : STD_LOGIC_VECTOR(7 downto 0);
-SIGNAL sub : STD_LOGIC;
-SIGNAL rca_out : STD_LOGIC_VECTOR(7 downto 0);
+signal bsignal 		: std_logic_vector(7 downto 0);
+signal sub 				: std_logic;
+signal rca_out 		: std_logic_vector(7 downto 0);
 
 -- Operation selector
-SIGNAL mux_out : STD_LOGIC_VECTOR(7 downto 0);
+signal mux_out 		: std_logic_vector(7 downto 0);
 
 -- Components
-COMPONENT cmp
-	PORT( a, b : in STD_LOGIC_VECTOR(7 downto 0);
-	      eq, neq : out STD_LOGIC);
-END COMPONENT;
+component cmp
+	port ( 	a, b 		: in std_logic_vector(7 downto 0);
+	      	eq, neq : out std_logic	);
+end component;
 
-COMPONENT rca 
-	PORT( a, b : in STD_LOGIC_VECTOR(7 downto 0);
-              cin  : in STD_LOGIC;
-	      s    : out STD_LOGIC_VECTOR(7 downto 0);
-	      cout : out STD_LOGIC);
-END COMPONENT;
+component rca
+	Port ( 	a, b 		: in std_logic_vector(7 downto 0);
+          cin  		: in std_logic;
+	      	s    		: out std_logic_vector(7 downto 0);
+	      	cout 		: out std_logic	);
+end component;
 
-BEGIN
--- NAND
-	nand_out <= ALU_inA NAND ALU_inB;
--- NOT
-	not_out <= NOT ALU_inA;
+begin
+-- nand
+	nand_out <= ALU_inA nand ALU_inB;
+-- not
+	not_out <= not ALU_inA;
 -- ADD and SUB
 	sub <= Operation(0);
-	bsignal <= (ALU_inB(7) XOR sub)& (ALU_inB(6) XOR sub)& (ALU_inB(5) XOR sub)& (ALU_inB(4) XOR sub)& (ALU_inB(3) XOR sub)& (ALU_inB(2) XOR sub)& (ALU_inB(1) XOR sub)& (ALU_inB(0) XOR sub); 
-	rca_8bit : rca port map (ALU_inA, bsignal, sub, rca_out, Carry);
+	bsignal <=
+		(ALU_inB(7) xor sub) & (ALU_inB(6) xor sub) &
+		(ALU_inB(5) xor sub) & (ALU_inB(4) xor sub) &
+		(ALU_inB(3) xor sub) & (ALU_inB(2) xor sub) &
+		(ALU_inB(1) xor sub) & (ALU_inB(0) xor sub);
+	rca_8bit : rca
+		port map (ALU_inA, bsignal, sub, rca_out, Carry	);
 	add_out <= rca_out;
 	sub_out <= rca_out;
 -- MUX
-	WITH Operation SELECT
-		mux_out <= add_out WHEN "00",
-			   sub_out WHEN "01",
-			   nand_out WHEN "10",
-			   not_out WHEN OTHERS;
+	with Operation select
+		mux_out <=
+			add_out when "00",
+			sub_out when "01",
+			nand_out when "10",
+			not_out when others;
 -- CMP
-	cmp_ab : cmp port map (ALU_inA, ALU_inB, Eq, NotEq);
+	cmp_ab : cmp
+		port map (ALU_inA, ALU_inB, Eq, NotEq	);
 -- isOutZero
-	cmp_zero : cmp port map ("00000000", mux_out, isOutZero, open);
+	cmp_zero : cmp
+		port map ("00000000", mux_out, isOutZero, open	);
 -- ALU_out
 	ALU_out <= mux_out;
 
-END alu_structure;
+end alu_structure;

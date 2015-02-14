@@ -1,36 +1,37 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-ENTITY alu_tb IS
-END alu_tb;
+entity alu_tb is
+end alu_tb;
 
-ARCHITECTURE behavioral OF alu_tb IS
+architecture behavioral of alu_tb is
 
-COMPONENT alu_wCLA
-PORT( ALU_inA, ALU_inB            : in STD_LOGIC_VECTOR(7 downto 0);
-	  Operation                   : in STD_LOGIC_VECTOR(1 downto 0);
-	  ALU_out                     : out STD_LOGIC_VECTOR(7 downto 0);
-	  Carry, NotEq, Eq, isOutZero : out STD_LOGIC);
-END COMPONENT;
+component alu_wCLA
+port (	ALU_inA, ALU_inB  	         	: in std_logic_vector(7 downto 0);
+	  	 	Operation                   	: in std_logic_vector(1 downto 0);
+	  	 	ALU_out                     	: out std_logic_vector(7 downto 0);
+	  	 	Carry, NotEq, Eq, isOutZero 	: out std_logic	);
+end component;
 
-COMPONENT alu_wRCA
-PORT( ALU_inA, ALU_inB            : in STD_LOGIC_VECTOR(7 downto 0);
-	  Operation                   : in STD_LOGIC_VECTOR(1 downto 0);
-	  ALU_out                     : out STD_LOGIC_VECTOR(7 downto 0);
-	  Carry, NotEq, Eq, isOutZero : out STD_LOGIC);
-END COMPONENT;
+component alu_wRCA
+port (	ALU_inA, ALU_inB            	: in std_logic_vector(7 downto 0);
+	  		Operation                   	: in std_logic_vector(1 downto 0);
+	  		ALU_out                     	: out std_logic_vector(7 downto 0);
+	  		Carry, NotEq, Eq, isOutZero 	: out std_logic	);
+end component;
 
-SIGNAL A, B, OutputCLA, OutputRCA: std_logic_vector(7 downto 0);
-SIGNAL op: std_logic_vector(1 downto 0);
-SIGNAL cCLA, cRCA, neqCLA, neqRCA, eqCLA, eqRCA, zeroCLA, zeroRCA: std_logic;
+signal A, B, OutputCLA, OutputRCA			: std_logic_vector(7 downto 0);
+signal op															: std_logic_vector(1 downto 0);
+signal cCLA, cRCA, neqCLA, neqRCA,
+	eqCLA, eqRCA, zeroCLA, zeroRCA			: std_logic;
 
-BEGIN
+begin
 	alu_1: alu_wCLA
-		port map (A, B, op, OutputCLA, cCLA, neqCLA, eqCLA, zeroCLA);
+		port map (A, B, op, OutputCLA, cCLA, neqCLA, eqCLA, zeroCLA	);
 	alu_2: alu_wRCA
-		port map (A, B, op, OutputRCA, cRCA, neqRCA, eqRCA, zeroRCA);
+		port map (A, B, op, OutputRCA, cRCA, neqRCA, eqRCA, zeroRCA	);
 process
-BEGIN
+begin
 	A <= "11001100";
 	B <= "00110011";
 	op <= "00";
@@ -46,5 +47,5 @@ BEGIN
 	wait for 1 ns;
 	op <= "01";
 	wait for 1 ns;
-END process;
-END behavioral;
+end process;
+end behavioral;

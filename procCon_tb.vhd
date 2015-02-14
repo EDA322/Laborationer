@@ -13,56 +13,53 @@ signal neq: std_logic := '0';
 signal CLK: std_logic := '0';
 
 component procController
-    port ( master_load_enable : in  STD_LOGIC;
-		   opcode 			  : in  STD_LOGIC_VECTOR (3 downto 0);
-		   neq 				  : in  STD_LOGIC;
-		   eq 				  : in  STD_LOGIC; 
-		   CLK 				  : in  STD_LOGIC;
-		   ARESETN 			  : in  STD_LOGIC;
-		   pcSel 			  : out STD_LOGIC;
-		   pcLd 			  : out STD_LOGIC;
-		   instrLd 			  : out STD_LOGIC;
-		   addrMd 			  : out STD_LOGIC;
-		   dmWr 			  : out STD_LOGIC;
-		   dataLd 			  : out STD_LOGIC;
-		   flagLd 			  : out STD_LOGIC;
-		   accSel 			  : out STD_LOGIC;
-		   accLd 			  : out STD_LOGIC;
-		   im2bus 			  : out STD_LOGIC;
-		   dmRd 			  : out STD_LOGIC;
-		   acc2bus 			  : out STD_LOGIC;
-		   ext2bus 			  : out STD_LOGIC;
-		   dispLd			  : out STD_LOGIC;
-		   aluMd 			  : out STD_LOGIC_VECTOR(1 downto 0)
-		   );
+    port (  master_load_enable  : in  std_logic;
+		        opcode 			        : in  std_logic_vector (3 downto 0);
+		        neq 				        : in  std_logic;
+      		  eq 				          : in  std_logic;
+      		  CLK 				        : in  std_logic;
+    		    ARESETN 			      : in  std_logic;
+    	      pcSel 			        : out std_logic;
+      	    pcLd 			          : out std_logic;
+      		  instrLd 			      : out std_logic;
+      		  addrMd 			        : out std_logic;
+      		  dmWr 			          : out std_logic;
+      		  dataLd 	            : out std_logic;
+      		  flagLd 			        : out std_logic;
+      		  accSel 			        : out std_logic;
+      		  accLd               : out std_logic;
+      		  im2bus 			        : out std_logic;
+      		  dmRd                : out std_logic;
+      		  acc2bus             : out std_logic;
+      		  ext2bus             : out std_logic;
+      		  dispLd              : out std_logic;
+      		  aluMd               : out std_logic_vector(1 downto 0)  );
 end component;
 
 begin
 	procCon: procController
-		port map (
-			master_load_enable => '1',
-			opcode => op,
-			neq => neq,
-			eq => eq,
-			CLK => CLK,
-			ARESETN => '1',
-			pcSel => open,
-			pcLd => open,
-			instrLd => open,
-		   	addrMd => open,
-		   	dmWr => open,
-		   	dataLd => open,	
-		   	flagLd => open,
-			accSel => open,
-		   	accLd => open,
-		   	im2bus => open,
-		   	dmRd => open,
-		   	acc2bus => open,
-		   	ext2bus => open,
-		   	dispLd => open,
-		   	aluMd => open
-		);
-			
+		port map (  master_load_enable => '1',
+                opcode => op,
+                neq => neq,
+                eq => eq,
+                CLK => CLK,
+                ARESETN => '1',
+                pcSel => open,
+                pcLd => open,
+                instrLd => open,
+                addrMd => open,
+                dmWr => open,
+                dataLd => open,
+                flagLd => open,
+                accSel => open,
+                accLd => open,
+                im2bus => open,
+                dmRd => open,
+                acc2bus => open,
+                ext2bus => open,
+                dispLd => open,
+                aluMd => open );
+
 clock: process
 begin
 	CLK <= '1';
@@ -106,8 +103,4 @@ begin
 	op <= "1111";
 	wait for 3*clk_cycle;
 end process;
-	
 end behavioral;
-
-
-

@@ -1,36 +1,48 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-ENTITY mem_tb IS
-END mem_tb;
+entity mem_tb is
+end mem_tb;
 
-ARCHITECTURE behavioral OF mem_tb IS
+architecture behavioral of mem_tb is
 
-SIGNAL instrOut:                             STD_LOGIC_VECTOR(11 downto 0);
-SIGNAL instrAddr, dataAddr, dataIn, dataOut: STD_LOGIC_VECTOR(7 downto 0);
-SIGNAL CLK, dataWE:                          STD_LOGIC;
+signal instrOut:                             std_logic_vector(11 downto 0);
+signal instrAddr, dataAddr, dataIn, dataOut: std_logic_vector(7 downto 0);
+signal CLK, dataWE:                          std_logic;
 
-COMPONENT mem_array
-	GENERIC ( DATA_WIDTH : integer := 12;
-			  ADDR_WIDTH : integer := 8;
-			  INIT_FILE  : string  := "inst_mem.mif");
-	PORT ( ADDR    : IN STD_LOGIC_VECTOR (ADDR_WIDTH-1 DOWNTO 0);
-	       DATA_IN : IN STD_LOGIC_VECTOR (DATA_WIDTH-1 DOWNTO 0);
-	       CLK     : IN STD_LOGIC;
-	       WE      : IN STD_LOGIC;
-	       OUTPUT  : OUT STD_LOGIC_VECTOR (DATA_WIDTH-1 DOWNTO 0));
-END COMPONENT;
+component mem_array
+	generic ( DATA_WIDTH : integer := 12;
+			  		ADDR_WIDTH : integer := 8;
+			  		INIT_FILE  : string  := "inst_mem.mif"	);
+	PORT ( 	ADDR    : in std_logic_vector (ADDR_WIDTH-1 downto 0);
+	       	DATA_IN : in std_logic_vector (DATA_WIDTH-1 downto 0);
+	       	CLK     : in std_logic;
+	       	WE      : in std_logic;
+	       	OUTPUT  : out std_logic_vector (DATA_WIDTH-1 downto 0)	);
+end component;
 
-BEGIN
+begin
 	instrMem: mem_array
-		generic map (DATA_WIDTH => 12, ADDR_WIDTH => 8, INIT_FILE => "inst_mem.mif")
-		port map (instrAddr, (OTHERS => '0'), CLK, '0', instrOut);
+		generic map (	DATA_WIDTH => 12,
+									ADDR_WIDTH => 8,
+									INIT_FILE => "inst_mem.mif")
+		port map (	instrAddr,
+								(others => '0'),
+								CLK,
+								'0',
+								instrOut	);
 	dataMem: mem_array
-		generic map (DATA_WIDTH => 8, ADDR_WIDTH => 8, INIT_FILE => "data_mem.mif")
-		port map (dataAddr, dataIn, CLK, dataWE, dataOut);
+		generic map (	DATA_WIDTH => 8,
+									ADDR_WIDTH => 8,
+									INIT_FILE => "data_mem.mif")
+		port map (	dataAddr,
+								dataIn,
+								CLK,
+								dataWE,
+								dataOut	);
 	dataAddr <= instrOut(7 downto 0);
 process
-BEGIN
+begin
 	CLK <= '0';
 	dataWE <= '0';
 	instrAddr <= "00000001";
@@ -51,5 +63,5 @@ BEGIN
 	wait for 67 ns;
 	CLK <= '1';
 	wait for 100 ns;
-END process;
-END behavioral;
+end process;
+end behavioral;

@@ -1,33 +1,41 @@
-LIBRARY ieee;
-USE ieee.std_logic_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-ENTITY procBus_tb IS
-END procBus_tb;
+entity procBus_tb is
+end procBus_tb;
 
-ARCHITECTURE behavioral OF procBus_tb IS
+architecture behavioral of procBus_tb is
 
-SIGNAL instr, data, acc, ext, output: 	  	   STD_LOGIC_VECTOR(7 downto 0);
-SIGNAL err, instrSEL, dataSEL, accSEL, extSEL: STD_LOGIC;
+signal instr, data, acc, ext, output					: std_logic_vector(7 downto 0);
+signal err, instrSEL, dataSEL, accSEL, extSEL	: std_logic;
 
-COMPONENT procBus
-	PORT ( INSTRUCTION : IN  std_logic_vector (7 DOWNTO 0);
-           DATA	       : IN  std_logic_vector (7 DOWNTO 0);
-           ACC 	       : IN  std_logic_vector (7 DOWNTO 0);
-           EXTDATA     : IN  std_logic_vector (7 DOWNTO 0);
-           OUTPUT      : OUT std_logic_vector (7 DOWNTO 0);
-           ERR         : OUT std_logic;
-           instrSEL    : IN  std_logic;
-           dataSEL     : IN  std_logic;
-           accSEL      : IN  std_logic;
-           extdataSEL  : IN  std_logic);
-END COMPONENT;
+component procBus
+	port (	INSTRUCTION	: in  std_logic_vector (7 downto 0);
+          DATA	      : in  std_logic_vector (7 downto 0);
+          ACC 	      : in  std_logic_vector (7 downto 0);
+         	EXTDATA     : in  std_logic_vector (7 downto 0);
+          OUTPUT      : out std_logic_vector (7 downto 0);
+          ERR         : out std_logic;
+          instrSEL    : in  std_logic;
+          dataSEL     : in  std_logic;
+          accSEL      : in  std_logic;
+          extdataSEL  : in  std_logic	);
+end component;
 
-BEGIN
+begin
 	theBus: procBus
-		port map (instr, data, acc, ext, output, err,
-				  instrSEL, dataSEL, accSEL, extSEL);
+		port map (	INSTRUCTION => instr,
+								DATA => data,
+								ACC => acc,
+								EXTDATA => ext,
+								OUTPUT => output,
+								ERR => err,
+				  			instrSEL => instrSEL,
+								dataSEL => dataSEL,
+								accSEL => accSEL,
+								extdataSEL => extSEL	);
 process
-BEGIN
+begin
 	instr <= "11111111";
 	data  <= "11110000";
 	acc   <= "11001100";
@@ -38,6 +46,6 @@ BEGIN
 	extSEL   <= '0';
 	wait for 100 ns;
 	instrSEL
-	
-END process;
-END behavioral;
+
+end process;
+end behavioral;
