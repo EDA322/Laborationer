@@ -15,19 +15,21 @@ entity mem_array is
 end mem_array;
 
 architecture behavioral of mem_array is
-type MEMORY_ARRAY is array (0 to 2**ADDR_WIDTH-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
-impure function init_memory_wfile(mif_file_name : in string) return MEMORY_ARRAY is
-    file mif_file 		: text open read_mode is mif_file_name;
-    variable mif_line : line;
-    variable temp_bv 	: bit_vector(DATA_WIDTH-1 downto 0);
-    variable temp_mem : MEMORY_ARRAY;
+type MEMORY_ARRAY is array (0 to 2**ADDR_WIDTH-1)
+	of std_logic_vector(DATA_WIDTH-1 downto 0);
+impure function init_memory_wfile(mif_file_name : in string)
+		return MEMORY_ARRAY is
+  file mif_file 		: text open read_mode is mif_file_name;
+  variable mif_line : line;
+  variable temp_bv 	: bit_vector(DATA_WIDTH-1 downto 0);
+  variable temp_mem : MEMORY_ARRAY;
 begin
-    for i in MEMORY_ARRAY'range loop
-        readline(mif_file, mif_line);
-        read(mif_line, temp_bv);
-        temp_mem(i) := to_stdlogicvector(temp_bv);
-    end loop;
-    return temp_mem;
+  for i in MEMORY_ARRAY'range loop
+    readline(mif_file, mif_line);
+  	read(mif_line, temp_bv);
+    temp_mem(i) := to_stdlogicvector(temp_bv);
+  end loop;
+  return temp_mem;
 end function;
 
 signal memory : MEMORY_ARRAY := init_memory_wfile(INIT_FILE);
