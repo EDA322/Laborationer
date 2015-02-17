@@ -8,7 +8,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use ieee.std_logic_unsigned.all;
 use std.textio.all;
 
 entity testbenchlab4 is
@@ -18,7 +17,7 @@ architecture Behavioral of testbenchlab4 is
 
 component EDA322_processor is
     port ( externalIn 					: in  std_logic_vector(7 downto 0);
-	       CLK 		  						: in  std_logic;
+         CLK 		  						: in  std_logic;
 	       master_load_enable 	: in  std_logic;
 	       ARESETN 	   	  			: in  std_logic;
 	       pc2seg 	 	  				: out std_logic_vector(7 downto 0);
@@ -32,7 +31,7 @@ component EDA322_processor is
 	       disp2seg   	  			: out std_logic_vector(7 downto 0);
 	       errSig2seg  	  			: out std_logic;
 	       ovf	   	  					: out std_logic;
-	       zero 	   	  				: out std_logic	);
+	       zero 	   	  				: out std_logic  );
 end component;
 
 
@@ -102,5 +101,3 @@ begin
 end process;
 
 end Behavioral;
-
-
