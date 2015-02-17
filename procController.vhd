@@ -27,8 +27,8 @@ end procController;
 
 architecture behavioral of procController is
 type state is (FE, DE, DE_2, EX, ME);
-signal mealy_state: state := EX;
-signal next_state: state  := FE;
+signal mealy_state: state;
+signal next_state: state := FE;
 signal control: std_logic_vector(15 downto 0);
 
 begin
@@ -65,10 +65,11 @@ output: process(CLK, ARESETN)
 begin
 	if ARESETN='0' then
 		control <= (others => '0');
-		mealy_state <= EX;
+   		mealy_state <= EX;
 	elsif rising_edge(CLK) then
    		if master_load_enable = '1' then
-   			-- All states
+			-- All states
+			mealy_state <= next_state;
    			control <= (others => '0');
    			control(13) <= '1';		-- instrLd
    			if (opcode(3) and opcode(2)
@@ -90,7 +91,7 @@ begin
 	   			control(0) <= '1';	-- aluMd(0)
    			end if;
    			-- Decode state
-   			if next_state = DE then
+   			if mealy_state = DE then
    				if (opcode = "1100" or (opcode = "1101" and eq = '1')
    						or (opcode = "1110" and neq = '1')) then
 	   				control(15) <= '1';	-- pcSel
@@ -109,7 +110,7 @@ begin
 	   				control(10) <= '1';	-- dataLd
    				end if;
    			-- Second decode state
-   			elsif next_state = DE_2 then
+   			elsif mealy_state = DE_2 then
    				if (opcode(3) and not opcode(2) and not opcode(1)) = '1' then
 	   				control(12) <= '1';	-- addrMd
    				end if;
@@ -117,7 +118,7 @@ begin
 	   				control(10) <= '1';	-- dataLd
    				end if;
    			-- Execute state
-   			elsif next_state = EX then
+   			elsif mealy_state = EX then
    				if (not (opcode(3) and opcode(2) and not opcode(1))
    						and not (opcode(3) and not opcode(2) and opcode(1))
    						and not (opcode(3) and opcode(1) and not opcode(0))
@@ -145,7 +146,7 @@ begin
 	   				control(2) <= '1';	-- dispLd
    				end if;
    			-- Memory state
-   			elsif next_state = ME then
+   			elsif mealy_state = ME then
    				if (opcode = "0111" or opcode = "1010") then
 	   				control(14) <= '1';	-- pcLd
    				end if;
@@ -157,8 +158,6 @@ begin
    				end if;
    			end if;
    	  	end if;
-
-   	  	mealy_state <= next_state;
   	end if;
 end process;
 

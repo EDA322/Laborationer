@@ -19,9 +19,10 @@ begin
 	couts(0) <= cin;
 	cout <= couts(8);
 	fullAdders: for i in 0 to 7 generate
-			port map (	a => a(i),
+		fullAdder: FA port map (	a => a(i),
 									b => b(i),
 									cin => couts(i),
 									s => s(i),
 									cout => couts(i+1)	);
+	end generate;
 end structure;

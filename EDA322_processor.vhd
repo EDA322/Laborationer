@@ -58,26 +58,26 @@ begin
 -- Processor controller
 	controller: procController
 		port map ( 	master_load_enable,
-								opcode => Instruction(11 downto 8),
-								neq => FlagInp(2),
-				   			eq => FlagInp(1),
-								CLK,
-								ARESETN,
-								pcSel,
-								pcLd,
-								instrLd,
-								addrMd,
-				   			dmWr,
-								dataLd,
-								flagLd,
-								accSel,
-								accLd,
-								im2bus,
-								dmRd,
-								acc2bus,
-				   			ext2bus,
-								dispLd,
-								aluMd	);
+				Instruction(11 downto 8),
+				FlagInp(2),
+				FlagInp(1),
+				CLK,
+				ARESETN,
+				pcSel,
+				pcLd,
+				instrLd,
+				addrMd,
+				dmWr,
+				dataLd,
+				flagLd,
+				accSel,
+				accLd,
+				im2bus,
+				dmRd,
+				acc2bus,
+				ext2bus,
+				dispLd,
+				aluMd	);
 -- Processor bus
 	theBus: procBus
 		port map (	INSTRUCTION => Instruction(7 downto 0),
@@ -116,8 +116,8 @@ begin
 									ADDR_WIDTH => 8,
 									INIT_FILE => "inst_mem.mif")
 		port map (	ADDR => pc,
-								DATA_IN => (OTHERS => '0'),
-								CLK,
+								DATA_IN =>(OTHERS => '0'),
+								CLK => CLK,
 								WE => '0',
 				  			OUTPUT => InstrMemOut	);
 	DataMemory: mem_array
@@ -126,7 +126,7 @@ begin
 									INIT_FILE => "data_mem.mif")
 		port map (	ADDR => Addr,
 								DATA_IN => busOut,
-								CLK,
+								CLK => CLK,
 								WE => dmWr,
 				  			OUTPUT => DataMemOut	);
 -- Muxes

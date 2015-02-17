@@ -18,15 +18,15 @@ end procBus;
 architecture structure of procBus is
 signal enc_sel: std_logic_vector(1 downto 0);
 
-component mux4to1
-  generic ( width: integer:=8 );
-	port ( w1  : in std_logic_vector(width-1 downto 0);
-	       w2  : in std_logic_vector(width-1 downto 0);
-	       w3  : in std_logic_vector(width-1 downto 0);
-	       w4  : in std_logic_vector(width-1 downto 0);
-	       f   : out std_logic_vector(width-1 downto 0);
-	       sel : in std_logic_vector(1 downto 0) );
-end component;
+--component mux4to1
+--  generic ( width: integer:=8 );
+--	port ( w1  : in std_logic_vector(width-1 downto 0);
+--	       w2  : in std_logic_vector(width-1 downto 0);
+--	       w3  : in std_logic_vector(width-1 downto 0);
+--	       w4  : in std_logic_vector(width-1 downto 0);
+--	       f   : out std_logic_vector(width-1 downto 0);
+--	       sel : in std_logic_vector(1 downto 0) );
+--end component;
 begin
 -- Encoding for the bus mux selector.
 -- s1 = a nor b
@@ -39,7 +39,7 @@ begin
 		(instrSEL or dataSEL or extdataSEL) and
     (instrSEL or accSEL  or extdataSEL) and
     (dataSEL  or accSEL  or extdataSEL);
-	mux: mux4to1
+	mux: entity work.mux4to1
 		generic map(  width => 8)
 		port map (  w1 => INSTRUCTION,
                 w2 => DATA,

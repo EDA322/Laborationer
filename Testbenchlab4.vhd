@@ -17,22 +17,22 @@ end testbenchlab4;
 architecture Behavioral of testbenchlab4 is
 
 component EDA322_processor is
-    Port ( externalIn : in  STD_LOGIC_VECTOR (7 downto 0);
-			  CLK : in STD_LOGIC;
-			  master_load_enable: in STD_LOGIC;
-			  ARESETN : in STD_LOGIC;
-           pc2seg : out  STD_LOGIC_VECTOR (7 downto 0);
-           instr2seg : out  STD_LOGIC_VECTOR (11 downto 0);
-           Addr2seg : out  STD_LOGIC_VECTOR (7 downto 0);
-           dMemOut2seg : out  STD_LOGIC_VECTOR (7 downto 0);
-           aluOut2seg : out  STD_LOGIC_VECTOR (7 downto 0);
-           acc2seg : out  STD_LOGIC_VECTOR (7 downto 0);
-           flag2seg : out  STD_LOGIC_VECTOR (3 downto 0);
-           busOut2seg : out  STD_LOGIC_VECTOR (7 downto 0);
-			  disp2seg: out STD_LOGIC_VECTOR(7 downto 0);
-			  errSig2seg : out STD_LOGIC;
-			  ovf : out STD_LOGIC;
-			  zero : out STD_LOGIC);
+    port ( externalIn 					: in  std_logic_vector(7 downto 0);
+	       CLK 		  						: in  std_logic;
+	       master_load_enable 	: in  std_logic;
+	       ARESETN 	   	  			: in  std_logic;
+	       pc2seg 	 	  				: out std_logic_vector(7 downto 0);
+	       instr2seg 	  				: out std_logic_vector(11 downto 0);
+	       Addr2seg   	  			: out std_logic_vector(7 downto 0);
+	       dMemOut2seg 	 	 			: out std_logic_vector(7 downto 0);
+	       aluOut2seg  	  			: out std_logic_vector(7 downto 0);
+	       acc2seg 	   	  			: out std_logic_vector(7 downto 0);
+	       flag2seg    	  			: out std_logic_vector(3 downto 0);
+	       busOut2seg  	  			: out std_logic_vector(7 downto 0);
+	       disp2seg   	  			: out std_logic_vector(7 downto 0);
+	       errSig2seg  	  			: out std_logic;
+	       ovf	   	  					: out std_logic;
+	       zero 	   	  				: out std_logic	);
 end component;
 
 
