@@ -35,6 +35,7 @@ begin
 nextState: process
 begin
   wait on opcode, mealy_state;
+  next_state <= FE;
   if mealy_state = FE then
 		next_state <= DE;
 	elsif mealy_state = DE then
@@ -75,7 +76,7 @@ end process;
 
 output: process
 begin
-  wait on opcode, mealy_state;
+  wait on opcode, mealy_state, eq, neq;
   -- All states
   control <= (others => '0');
   control(13) <= '1';		-- instrLd
@@ -167,18 +168,18 @@ begin
 end process;
 
 	pcSel 	<= control(15);
-	pcLd 	<= control(14);
-	instrLd <= control(13);
+	pcLd 	<= control(14) and master_load_enable;
+	instrLd <= control(13) and master_load_enable;
 	addrMd	<= control(12);
 	dmWr 	<= control(11);
-	dataLd 	<= control(10);
-	flagLd 	<= control(9);
+	dataLd 	<= control(10) and master_load_enable;
+	flagLd 	<= control(9) and master_load_enable;
 	accSel 	<= control(8);
-	accLd 	<= control(7);
+	accLd 	<= control(7) and master_load_enable;
 	im2bus 	<= control(6);
 	dmRd 	<= control(5);
 	acc2bus <= control(4);
 	ext2bus <= control(3);
-	dispLd 	<= control(2);
+	dispLd 	<= control(2) and master_load_enable;
 	aluMd 	<= control(1 downto 0);
 end behavioral;

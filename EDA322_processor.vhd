@@ -38,8 +38,8 @@ signal pcLd, instrLd, dmWr, dataLd,
 signal busOut														: std_logic_vector(7 downto 0);
 
 ---- ALU and PC-incrementor outputs ----
-signal aluOut														: std_logic_vector(7 downto 0);
-signal pcIncOut													: std_logic_vector(7 downto 0);
+signal AluOut														: std_logic_vector(7 downto 0);
+signal PCIncrOut													: std_logic_vector(7 downto 0);
 signal FlagInp													: std_logic_vector(3 downto 0);
 
 ---- Mux outputs ----
@@ -95,26 +95,23 @@ begin
 		port map (	ALU_inA => OutFromAcc,
 								ALU_inB => busOut,
 								Operation => aluMd,
-								ALU_out => aluOut,
+								ALU_out => AluOut,
 			  				Carry => FlagInp(3),
 								NotEq => FlagInp(2),
 								Eq => FlagInp(1),
 			  				isOutZero => FlagInp(0)	);
-	pcInc: entity work.alu_wRCA
-		port map (	ALU_inA => "00000001",
-								ALU_inB => PC,
-								Operation => "00",
-			  				ALU_out => pcIncOut,
-								Carry => open,
-								NotEq => open,
-								Eq => open,
-			  				isOutZero => open	);
+	pcInc: entity work.rca
+		port map (  a => pc,
+                b => (others => '0'),
+                cin => '1',
+                s => PCIncrOut,
+                cout => open	);
 -- Memory units
 	InstructionMemory: entity work.mem_array
 		generic map (	DATA_WIDTH => 12,
 									ADDR_WIDTH => 8,
 									INIT_FILE => "inst_mem.mif")
-		port map (	ADDR => pc,
+		port map (	ADDR => PC,
 								DATA_IN =>(OTHERS => '0'),
 								CLK => CLK,
 								WE => '0',
@@ -131,7 +128,7 @@ begin
 -- Muxes
 	pcMux: entity work.mux2to1
 		generic map (	width => 8)
-		port map (	w1 => pcIncOut,
+		port map (	w1 => PCIncrOut,
 								w2 => busOut,
 								f => nxtpc,
 								sel => pcSel	);
@@ -143,7 +140,7 @@ begin
 								sel => addrMd	);
 	aluMux:	entity work.mux2to1
 		generic map (	width => 8)
-		port map (	w1 => aluOut,
+		port map (	w1 => AluOut,
 								w2 => busOut,
 								f => aluMuxOut,
 								sel => accSel	);
@@ -191,12 +188,12 @@ begin
 				  			input 			=> FlagInp,
 								res 				=> FRegOut	);
 -- Displays and flags
-	pc2seg 				<= pc;
+	pc2seg 				<= PC;
 	instr2seg			<= Instruction;
 	Addr2seg			<= Addr;
 	dMemOut2seg 	<= MemDataOutReged;
 	busOut2seg 		<= busOut;
-	aluOut2seg		<= aluOut;
+	aluOut2seg		<= AluOut;
 	acc2seg 			<= OutFromAcc;
 	flag2seg			<= FRegOut;
 	ovf						<= FRegOut(3);
