@@ -72,7 +72,7 @@ begin
 	       zero => open
 	);
 
-	clk <= not clk after 5 ns;
+	clk <= not clk after 4 ns;
 reset: process(clk)
 begin
 	if rising_edge(clk) then
