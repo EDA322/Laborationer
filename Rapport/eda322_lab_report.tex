@@ -273,7 +273,36 @@ testbench in ModelSim (the same program was used for testing in the simulation).
 \subsection{Performance, Area and Power Analysis}
 (max: 2 pages)
 \\\\
-To be announced in the Lab7PM.
+For task 1 we tried to optimize our design for maximum performance with no regard to area usage or power consumption. We set the design goal to Balanced. In synthesis properties we set the optimization mode to Speed, optimization level to high and unchecked everything that tried to save power. We started with the timing constraint set at 7.000ns and lowered it further and further until the clock frequency was no longer improving. Then we lowered the time constraint a bit more, with no improvement. Our best clock frequency, 198.491 MHz, was achieved when meeting the timing constraint set at 5.100ns. The critical path is between fetch/decode and flag registers.
+
+For task 2 we set the design goal to area reduction. In synthesis properties we set optimization mode to Area and optimization level to normal. We did not use any power saving options. We did manage to reduce the area used quite a bit compared to task 1. 
+
+For task 3 we set the design goal to power optimization. In synthesis properties we set optimization mode to Area, optimization level to High, power to yes and global optimization to Maximum Delay. This configuration yielded less power consumption than task 1 and 2.
+We found that the most power hungry module across all implementations is the ALU, followed by FE.
+
+Task 1 was our most powerful design, but when we tried to maximize efficiency in task 4 we ended up with a result that was not only the most efficient yet but also had less area usage than task 2 and less power consumption than task 3. For this reason we ended up with only two different configurations. One optimized for performance and one for everything else. To achieve this result we used the design goal Minimum Runtime, the synthesis properties optimization mode Area, optimization level High, power to Yes and the map properties power Extra Effort and global optimization Power. The critical path with this configuration is from controller/mealy\_state\_FSM\_FFd1 to FReg/reg\_out\_2, which differs from the critical path in the other implementation.
+
+
+\begin{table}   
+	\centering
+	\small
+	\def\arraystretch{1.1}              
+	\begin{tabular}{|l|l|l|}
+		\hline
+		{\bf Design Goals \& Strategies} & \bf Performance  & \bf Efficiency/Area/Power \\ \hline
+		Design goal       & Balanced   & Minimum Runtime     \\ \hline
+		{\bf Synthesis properties} & & \\ \hline
+		-opt\_mode         & Speed & Area    \\
+		-op\_level         & High & High   \\ 
+		-power            & no   & yes  \\ 
+		-glob\_opt         & AllClockNets & AllClockNets  \\ \hline
+		{\bf Map properties} & &   \\ \hline
+		-power            & off  & Extra Effort   \\ 
+		-glob\_opt         & off  & off \\ \hline
+	\end{tabular}
+	\caption{Settings for the best implementations.}
+	\label{tab:set}
+\end{table}
 
 \section{Analysis}
 (max: 1 page)
