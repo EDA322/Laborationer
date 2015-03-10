@@ -37,11 +37,26 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \section{Introduction}
-(max: 1 page)
-\\\\
-This part will introduce the reader to the report. 
 
-At the beginning, describe what the purpose of this lab report is. Then describe briefly what each section discusses and finally summarise the most important conclusions. 
+The purpose of this paper is to introduce the reader to the development of the
+ChAcc processor, and to justify why the several design and functionality
+choices were made in favors of others. We will also explain what
+problems we encountered during the development, and what we did to overcome
+them.
+
+The first section is dedicated to the implementation of the {\it Arithmetic and
+Logic Unit}. There we will discuss the implementation choices we made. In the
+second section we discuss the top-level design of the processor, how the
+registers, memories and the bus were implemented, and how we connected all
+components in the data path. In section 3 we explain how we designed the
+controller, the processors {\it Finite State Machine}, to make it work in the
+simplest way possible. Section 4 discusses how we verified the processor by
+constructing a testbench for the circuit. In section 5 we then continue the
+discussion of how we verified a synthensized and implemented design on the
+Nexys 3 board. In section 6, we discuss final optimization for the processor in
+terms of power dissipation, area usage and performance. Finally in section 7 we
+wrap the report with a in-depth analysis of the working progress and the
+obtained results. 
 
 \section{Method}
 The processor was designed in VHDL-code, using software QuestaSim (ModelSim) for simulation and
