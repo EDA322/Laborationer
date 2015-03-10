@@ -84,7 +84,7 @@ EDA322_dut : EDA322_processor port map (
 
 
 
-CLK <= not CLK after 3.36 ns; -- CLK with period of 10ns
+CLK <= not CLK after 5 ns; -- CLK with period of 10ns
 
 
 process (CLK)

@@ -1,144 +1,238 @@
 ﻿-- Task 1 --
--Process properties
--opt_mode = Speed
--op_level = High
--power    = no
--glob_opt = AllClockNets
+------------------------------ SETTINGS -----------------------------
+	Design Goals & Strategies:
+		-Design goal  = Balanced
+	Synthesis properties:
+		-opt_mode = Speed
+		-op_level = High
+		-power    = no
+		-glob_opt = AllClockNets
+	Map properties:
+		-glob_opt = Off
+		-power    = Off
+---------------------------------------------------------------------
 
--Evaluating performance
-	Constraint:	6.300ns
-	Clock period:  	6.265ns
+	Evaluating performance:
+		Constraint:	6.300ns
+		Clock period:  	6.265ns
 	
-	Constraint:	6.200ns
-	Clock period:  	6.107ns
+		Constraint:	6.200ns
+		Clock period:  	6.107ns
 
-	Constraint:	6.100ns
-	Clock period:  	6.010ns
+		Constraint:	6.100ns
+		Clock period:  	6.010ns
 
-	Constraint:	6.000ns
-	Clock period: 	5.918ns
+		Constraint:	6.000ns
+		Clock period: 	5.918ns
 
-	Constraint:	6.900ns
-	Clock period:  	5.673ns
+		Constraint:	6.900ns
+		Clock period:  	5.673ns
 	
-	Constraint:	5.600ns
-	Clock period:  	5.558ns
+		Constraint:	5.600ns
+		Clock period:  	5.558ns
 	
-	Constraint:	5.500ns
-	Clock period:  	5.455ns
+		Constraint:	5.500ns
+		Clock period:  	5.455ns
 	
-	Constraint:	5.000ns
-	Clock period:  	5.245ns
-	1 constraint not met
+		Constraint:	5.000ns
+		Clock period:  	5.245ns
+		1 constraint not met
 	
-	Constraint:	5.200ns
-	Clock period:  	5.506ns
-	1 constraint not met
+		Constraint:	5.200ns
+		Clock period:  	5.506ns
+		1 constraint not met
 	
-	Constraint:	5.100ns
-	Clock period:  	5.038ns
-	FE_DE/reg_out_9_3 - FReg/reg_out_0
-	Critical path:	4.982ns
-	Slack:		0.062ns
+		Constraint:	5.100ns
+		Clock period:  	5.038ns
+		FE_DE/reg_out_9_3 - FReg/reg_out_0
+		Critical path:	4.982ns
+		Slack:		0.062ns
 
--Evaluating area usage
-	99 Slice registers (99 used as flip-flops)
-	299 Slice LUTs
-	398 in total.
+	Evaluating area usage:
+		89 slices.
 
--Power usage
-	On-Chip power usage: 59 mW, 20mW leakage
-	Most power used by module: alu, 1.57mW (2.2mW including rca)
+	Power usage:
+		On-Chip power usage: 59 mW, 20mW leakage
+		Most power used by module:
+			-alu, 1.57mW (2.2mW including rca)
 
-e = (1/5.038e-3)/(59e-3*398) = 8.45
+	e = (1/5.038e-3)/(59e-3*89) = 37.80
 
 -- Task 2 --
--Process properties
--opt_mode = Area
--op_level = Normal
--power    = no
--glob_opt = AllClockNets
+------------------------------ SETTINGS -----------------------------
+	Design Goals & Strategies:
+		-Design goal  = Area reduction
+	Synthesis properties:
+		-opt_mode = Area
+		-op_level = Normal
+		-power    = no
+		-glob_opt = AllClockNets
+---------------------------------------------------------------------
 
--Evaluating performance
-1:	Constraint:	5.100ns
-	Clock period:  	6.713ns
-	1 constraint not met
-	FE_DE/reg_out_10 - FReg/reg_out_0
-	Critical path:	7.062ns
-	Slack:		-1.613ns
+	Evaluating performance:
+		1:	Constraint:	5.100ns
+			Clock period:  	6.713ns
+			1 constraint not met
+			FE_DE/reg_out_10 - FReg/reg_out_0
+			Critical path:	7.062ns
+			Slack:		-1.613ns
 
-2: 	Constraint:	7.000ns
-	Clock period:  	6.951ns
-	FE_DE/reg_out_10 - FReg/reg_out_0
-	Critical path:	7.295ns
-	Slack:		0.049ns
+		2: 	Constraint:	7.000ns
+			Clock period:  	6.951ns
+			FE_DE/reg_out_10 - FReg/reg_out_0
+			Critical path:	7.295ns
+			Slack:		0.049ns
 
--Evaluating area usage
-1:	75 Slice registers (75 used as flip-flops)
-	232 Slice LUTs
-	307 in total.
+	Evaluating area usage:
+		1:	75 Slice registers (75 used as flip-flops)
+			232 Slice LUTs
+			307 in total.
 
-2:	75 Slice registers (75 used as flip-flops)
-	232 Slice LUTs
-	307 in total.
+		2:	75 Slice registers (75 used as flip-flops)
+			232 Slice LUTs
+			307 in total.
+	
+	Power usage:
+		1:	On-Chip power usage: 48mW, 20mW leakage
+			Most power used by module:
+				- alu, 0.96mW (1.17mW including rca)
 
--Power usage
-1:	On-Chip power usage: 48mW, 20mW leakage
-	Most power used by module:
-		- alu, 0.96mW (1.17mW including rca)
-
-e = (1/6.713e-3)/(48e-3*307) = 10.11
+	e = (1/6.713e-3)/(48e-3*307) = 10.11
 
 -- Task 3 -- 
 1:
+------------------------------ SETTINGS -----------------------------
+	Design Goals & Strategies:
+		-Design goal  = Power optimization
+	Synthesis properties:
+		-opt_mode = Area
+		-op_level = High
+		-power    = yes
+		-glob_opt = Maximum Delay
+---------------------------------------------------------------------
 
--Process properties
--opt_mode = Area
--op_level = High
--power    = yes
--glob_opt = Maximum Delay
+	Evaluating performance:
+		Constraint:	5.100ns
+		Clock period:  	6.572ns
+		1 constraint not met
+		FE_DE/reg_out_8 - FReg/reg_out_0
+		Critical path:	6.528ns
+		Slack:		-1.472ns
 
--Evaluating performance
-	Constraint:	5.100ns
-	Clock period:  	6.572ns
-	1 constraint not met
-	FE_DE/reg_out_8 - FReg/reg_out_0
-	Critical path:	6.528ns
-	Slack:		-1.472ns
+	Evaluating area usage:
+		80 Slice registers (80 used as flip-flops)
+		232 Slice LUTs
+		312 in total.
 
--Evaluating area usage
-	80 Slice registers (80 used as flip-flops)
-	232 Slice LUTs
-	312 in total.
-
--Power usage
-	On-Chip power usage: 54 mW, 20mW leakage
-	Most power used by module:
-		- alu, 0.97mW (1.16mW including rca)
+	Power usage:
+		On-Chip power usage: 54 mW, 20mW leakage
+		Most power used by module:
+			- alu, 0.97mW (1.16mW including rca)
 
 2:
+------------------------------ SETTINGS -----------------------------
+	Design Goals & Strategies:
+		-Design goal  = Power optimization
+	Synthesis properties:
+		-opt_mode = Area
+		-op_level = High
+		-power    = yes
+		-glob_opt = AllClockNets
+---------------------------------------------------------------------
 
--Process properties
--opt_mode = Area
--op_level = High
--power    = yes
--glob_opt = AllClockNets
+	Evaluating performance:
+		Constraint:	7.000ns
+		Clock period:  	6.688ns
+		FE_DE/reg_out_8 - FReg/reg_out_0
+		Critical path:	6.646ns
+		Slack:		0.312ns
 
--Evaluating performance
-	Constraint:	7.000ns
-	Clock period:  	6.688ns
-	FE_DE/reg_out_8 - FReg/reg_out_0
-	Critical path:	6.646ns
-	Slack:		0.312ns
+	Evaluating area usage:
+		80 Slice registers (80 used as flip-flops)
+		233 Slice LUTs
+		313 in total.
 
--Evaluating area usage
-	80 Slice registers (80 used as flip-flops)
-	233 Slice LUTs
-	313 in total.
+	Power usage:
+		On-Chip power usage: 45mW, 20mW leakage
+		Most power used by module:
+			- alu, 0.69mW (0.84mW including rca)
 
--Power usage
-	On-Chip power usage: 45mW, 20mW leakage
-	Most power used by module:
-		- alu, 0.69mW (0.84mW including rca)
+	e = (1/6.688e-3)/(45e-3*313) = 10.62
 
-e = (1/6.688e-3)/(45e-3*313) = 10.62
+-- Task 4 -- 
+1:
+------------------------------ SETTINGS -----------------------------
+	Design Goals & Strategies:
+		-Design goal  = Minimum Runtime 
+	Synthesis properties:
+		-opt_mode = Area
+		-op_level = High
+		-power    = yes
+		-glob_opt = AllClockNets
+	Map properties:
+		-power    = Extra Effort
+---------------------------------------------------------------------
+
+	Evaluating performance:
+		Constraint:	7.000ns
+		Clock period:  	6.857ns (145.836 MHz)
+		controller/mealy_state_FSM_FFd1 - FReg/reg_out_0_1
+		Critical path:	7.234ns
+		Slack:		0.143ns
+
+	Evaluating area usage:
+		73 slices.
+
+	Power usage:
+		On-Chip power usage: 41 mW, 20mW leakage
+		Most power used by module:
+			- alu, 0.67mW (0.77mW including rca)
+
+	e = 145.836/(41e-3*73) = 48.73
+
+2:
+------------------------------ SETTINGS -----------------------------
+	Design Goals & Strategies:
+		-Design goal  = Minimum Runtime 
+	Synthesis properties:
+		-opt_mode = Area
+		-op_level = High
+		-power    = yes
+		-glob_opt = AllClockNets
+	Map properties:
+		-power    = Extra Effort
+		-glob_opt = Power
+---------------------------------------------------------------------
+
+	Evaluating performance:
+		Constraint:	6.800ns
+		Clock period:  	6.935ns (144.196MHz)
+		controller/mealy_state_FSM_FFd1 - FReg/reg_out_2
+		Critical path:	6.882ns
+		Slack:		0.069ns
+
+	Evaluating area usage:
+		75 Slice registers (75 used as flip-flops)
+		213 Slice LUTs
+		288 in total.
+
+	Power usage:
+		On-Chip power usage: 39 mW, 20mW leakage
+		Most power used by module:
+			- FE, 0.600mW (no alu!)
+
+	e = 144.196/(39e-3*288) = 12.84
+
+_____________________________________________________________________________________________
+|                       |                              Metric                               |
+|-----------------------|-------------------------------------------------------------------|
+| Design                | Performance | Area usage | Power dissipation | Overall efficiency |
+|-----------------------|-------------------------------------------------------------------|
+| Performance-optimized | 198.491 MHz | 89 slices  | 59 mW             | 37.80              |
+|-----------------------|-------------|------------|-------------------|--------------------|
+| Area-optimized        | 145.836 MHz | 73 slices  | 41 mW             | 48.73              |
+|-----------------------|-------------|------------|-------------------|--------------------|
+| Power-optimized       | 145.836 MHz | 73 slices  | 41 mW             | 48.73              |
+|-----------------------|-------------|------------|-------------------|--------------------|
+| Efficiency-optimized  | 145.836 MHz | 73 slices  | 41 mW             | 48.73              |
+|_______________________|_____________|____________|___________________|____________________|
