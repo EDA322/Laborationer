@@ -144,7 +144,7 @@ when we read and write data to a memory unit:
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=1\textwidth]{Figurer/data_memory}
+	\includegraphics[width=1\textwidth]{Figurer/data_memory.PNG}
 	\label{fig:sim}
 \end{figure}
 
@@ -185,7 +185,7 @@ handles all the control signals. It is minimized in the same manner as the finit
 
 \begin{figure}[h!]
 	\centering
-	\includegraphics[width=1\textwidth]{Figurer/controller}
+	\includegraphics[width=1\textwidth]{Figurer/controller.PNG}
 	\caption{Waveform of controller executing some instructions.}
 	\label{fig:con}
 \end{figure}
@@ -226,7 +226,9 @@ the flags) that were observed on the display while stepping through the program.
 Table~\ref{tab:fib_data} shows the data that the program produces, which is indeed the beginning
 of the fibonacci sequence. All the observed values matched with the simulation of the processor's
 testbench in ModelSim (the same program was used for testing in the simulation).
-   
+
+\newpage   
+
 \begin{table}   
 	\centering
 	\small
@@ -276,13 +278,33 @@ testbench in ModelSim (the same program was used for testing in the simulation).
 To be announced in the Lab7PM.
 
 \section{Analysis}
-(max: 1 page)
-\\\\
-Summarize your results after performing all the labs (2, 3, 4 and 5).
 
-Mention and discuss interesting findings and observations, as well as difficulties in completing some of the tasks of the four last labs.
+The overall performance and implementation of the processor has been consistent
+and for the most part our code have been working as expected. When we designed
+the ALU, we chose the ripple carry adder implementation over the faster carry
+look-ahead. The RCA is much slower since it takes O(n) to complete an
+addition/subtraction, but it has a much smaller area usage than the CLA, which
+ultimately made us choose this implementation. One observation we made when 
+implementing the controller was that when we in the early stages combined a
+synchronous process with an asynchronous one, our state machine behaved in
+strange ways. In the simulation, when looking at the state the machine was in
+and the outputs, it seemed like the state was shifted one clock cycle later
+than the output, leading to unwanted behaviour when fetching the opcode in
+the wrong state. We solved it in the end by spliting up the process into two
+parts. While testing the design, we made few bug fixes in the data path that
+caused wrong behaviour of the machine.
 
-After looking at your results, draw conclusions and describe briefly the learning outcome, that is what have you learnt by performing these labs?  
+When the design was complete, we synthesized it and fixed the few warnings we
+got, where one of them was a latch that was created in the FSM. When testing
+the processor on the Nexys board, it worked (more or less) on the first try.
+
+What we learned about synthesizing a design was that there is more to a
+processor than it's implementation alone. The synthesis gives control to how
+the design should be implemented on a circuit, by adjusting it for performance,
+area usage or power consumption. While we for the most part learned about
+designing a processor from scratch, we also got an insight of how processors
+are implemented in the industry by synthesizing for expected specifications of
+the circuit.
 
 % Appendix
 \newpage
