@@ -55,21 +55,24 @@ constructing a testbench for the circuit. In section 5 we then continue the
 discussion of how we verified a synthensized and implemented design on the
 Nexys 3 board. In section 6, we discuss final optimization for the processor in
 terms of power dissipation, area usage and performance. Finally in section 7 we
-wrap the report with a in-depth analysis of the working progress and the
+end the report with a in-depth analysis of the working progress and the
 obtained results. 
+
+In the end, the ChAcc processor was design for efficency rather than for
+performance, making it less power consumptious and smaller in size.
 
 \section{Method}
 The processor was designed in VHDL-code, using software QuestaSim (ModelSim) for simulation and
-XillinxISE for synthesizing. 
+XillinxISE for synthesizing. When testing the circuit, we used the Nexys 3 board. 
 
 \subsection{Arithmetic and Logic Unit (ALU)}
 
 The ALU can take two 8-bit unsigned data words, and perform either of the following operations:
 addition, subtraction, bitwise NAND or bitwise NOT. It also has four indicators: {\it Carry},
-{\it isOutZero}, {\it Eq} and {\it NotEq}. The {\it Carry}-bit sets to 1 when an overflow occurs
+{\it isOutZero}, {\it Eq} and {\it NotEq}. The Carry-bit sets to 1 when an overflow occurs
 (note that this indicator is only valid when performing addition). The other indicators are
 self-explanatory. When choosing what operation to perform on the inputs, you set the two-bit
-{\it operation} signal to one of the codes specified in Table~\ref{tab:op}.
+{\it opcode} to one of the values specified in Table~\ref{tab:op}.
 
 We started out with implementing the data flow architecture for a {\it full adder}. A full adder
 takes three bits of input, where two of them are the numbers being added and the third one is a
@@ -83,15 +86,15 @@ Appendix~\ref{app:fig}.
 We had to implement additional circuitry for handling the subtraction of the two inputs. For
 that we first defined an internal signal {\it SUB}, that entirely depends on the first bit of the
 operation signal. We also defined an 8-bit internal signal, that depends on the {\it exclusive
-or} between the second ALU-input and the {\it SUB}-signal. In that way, when the {\it SUB}-signal
+or} between the second ALU-input and the SUB-signal. In that way, when the SUB-signal
 is set, the {\it XOR}-gate behaves like an inverter. With the inverted input and the {\it SUB}-signal
-going directly to the carry-in of the first full adder, we have the {\it 2 compliment} of the second
+going directly to the carry-in of the first full adder, we have the {\it 2 complement} of the second
 input, which is just what is needed for the subtraction to work (see Figure~\ref{fig:sub} in
 Appendix~\ref{app:fig} for the block diagram).
 
 Finally, we needed to implement the data flow for a 4-1 {\it multiplexer}, whose purpose is to
 select the correct operation for the ALU-output. We did this in VHDL-code by matching the operation
-signal to it's corresponding operation, and then sending the signal to the output.
+signal to its corresponding operation, and then sending the signal to the output.
 
 \begin{table}   
 	\centering
@@ -146,16 +149,17 @@ when we read and write data to a memory unit:
 	\centering
 	\includegraphics[width=1\textwidth]{Figurer/data_memory.PNG}
 	\label{fig:sim}
+  \caption{Waveforms for storing data in a memory.}
 \end{figure}
 
 The memory is initially stored with the value `0' (or ``000000000000'' in binary) in address `0'.
-{\it WE} is also low, which means writing is disabled. When {\it WE} becomes active, the word
+{\it WE} is also low, which means writing is disabled. When WE becomes active, the word
 ``110011001100'' is stored at the next rising edge of the clock ({\it CLK}) signal.
 
 The bus is implemented using a 4-to-1-multiplexer rather than using tri-state buffers. In this
 way, no signals can overload, but there may be multiple select signals active. For this we have
 the error signal ({\it ERR}), that activates when at least two select signals are active. The
-select signal for the multiplexer and the {\it ERR}-signal are implemented using data flow, where
+select signal for the multiplexer and the ERR-signal are implemented using data flow, where
 minimizations of the boolean expressions have been made (see Figure~\ref{fig:enc}).
 
 \begin{figure}[h!]
@@ -170,7 +174,7 @@ minimizations of the boolean expressions have been made (see Figure~\ref{fig:enc
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=0.5\textwidth]{Figurer/procController_FSM_Mealy}
-	\caption{The {\it Final State Machine} of the processor's controller.}
+	\caption{The {\it Finite State Machine} of the processor's controller.}
 	\label{fig:fsm}
 \end{figure}
 
@@ -180,7 +184,7 @@ the output combinatorial. In the state combinatorial we took the boolean express
 state and minimized it through Karnaugh diagrams. The finite state machine is implemented in 
 mealy state style so the states are dependent on both the current state and the opcode. 
 State register has an asynchronous reset which restores the machine state to fetch ({\it FE}). 
-The register is controlled by the \emph{master load enable} signal. The output combinatorial 
+The register is controlled by the \emph{master\_load\_enable} signal. The output combinatorial 
 handles all the control signals. It is minimized in the same manner as the finite state machine.
 
 \begin{figure}[h!]
@@ -190,19 +194,19 @@ handles all the control signals. It is minimized in the same manner as the finit
 	\label{fig:con}
 \end{figure}
 \newpage
-In figure~\ref{fig:con} we have included a few waveforms showing the processor adding something 
-from the memory to the accumulator and then comparing it to another memory cell. It then jumps 
-depending on the result of the comparison. From the state we're in the accumulator holds the value 5. 
-The instruction to be executed is ADX ACC, DM[DM[4]] which is an indirect addition. The data in the 
-memory location is 255, so when the ALU performs the addition the accumulator stores the value 4 and 
-we get an overflow. The next instruction, \emph{CMP ACC, DM[8]}, compares the value in the accumulator 
-with the value in the memory location. In this case they are both 4 so the EQ signal is set to 1 and 
-NEQ is set to 0. When we go to the next instruction, which is JNE 255, we will not jump because NEQ is 
-set to 0.
+In figure~\ref{fig:con} we have included a few waveforms showing the processor adding the content 
+of a memory cell to the accumulator register and then comparing it to the content of another memory
+cell. It then jumps depending on the result of the comparison. From the state we're in, the
+accumulator holds the value 5. The instruction to be executed is {\it ADX ACC, DM[DM[4]]} which is an
+indirect addition. The data in the memory location is 255, so when the ALU performs the addition
+the accumulator stores the value 4 and we get an overflow. The next instruction, \emph{CMP ACC, DM[8]},
+compares the value in the accumulator with the value in the memory location. In this case they are
+both 4 so the EQ signal is set to 1 and NEQ is set to 0. When we go to the next instruction, which is
+{\it JNE 255}, we will not jump because NEQ is set to 0.
 
 \subsection{Processor's Testbench}
 
-In the testbench we used behavioral VHDL to test our code. We used a reading function to read files which
+In the testbench we used behavioral VHDL to test our code. We used a reading function toptimizationso read files which
 contained expected outputs for each segmented display. In the architecture we divided all the testing 
 of the displays into separate processes. In each process we assert that when a value changes in the display
 it is equal to the expected output in the read file. If the assertion fails, the test exits immediately 
@@ -273,17 +277,6 @@ testbench in ModelSim (the same program was used for testing in the simulation).
 \end{table}
 
 \subsection{Performance, Area and Power Analysis}
-(max: 2 pages)
-\\\\
-For task 1 we tried to optimize our design for maximum performance with no regard to area usage or power consumption. We set the design goal to Balanced. In synthesis properties we set the optimization mode to Speed, optimization level to high and unchecked everything that tried to save power. We started with the timing constraint set at 7.000ns and lowered it further and further until the clock frequency was no longer improving. Then we lowered the time constraint a bit more, with no improvement. Our best clock frequency, 198.491 MHz, was achieved when meeting the timing constraint set at 5.100ns. The critical path is between fetch/decode and flag registers.
-
-For task 2 we set the design goal to area reduction. In synthesis properties we set optimization mode to Area and optimization level to normal. We did not use any power saving options. We did manage to reduce the area used quite a bit compared to task 1. 
-
-For task 3 we set the design goal to power optimization. In synthesis properties we set optimization mode to Area, optimization level to High, power to yes and global optimization to Maximum Delay. This configuration yielded less power consumption than task 1 and 2.
-We found that the most power hungry module across all implementations is the ALU, followed by FE.
-
-Task 1 was our most powerful design, but when we tried to maximize efficiency in task 4 we ended up with a result that was not only the most efficient yet but also had less area usage than task 2 and less power consumption than task 3. For this reason we ended up with only two different configurations. One optimized for performance and one for everything else. To achieve this result we used the design goal Minimum Runtime, the synthesis properties optimization mode Area, optimization level High, power to Yes and the map properties power Extra Effort and global optimization Power. The critical path with this configuration is from controller/mealy\_state\_FSM\_FFd1 to FReg/reg\_out\_2, which differs from the critical path in the other implementation.
-
 
 \begin{table}   
 	\centering
@@ -292,19 +285,57 @@ Task 1 was our most powerful design, but when we tried to maximize efficiency in
 	\begin{tabular}{|l|l|l|}
 		\hline
 		{\bf Design Goals \& Strategies} & \bf Performance  & \bf Efficiency/Area/Power \\ \hline
-		Design goal       & Balanced   & Minimum Runtime     \\ \hline
-		{\bf Synthesis properties} & & \\ \hline
-		-opt\_mode         & Speed & Area    \\
-		-op\_level         & High & High   \\ 
-		-power            & no   & yes  \\ 
-		-glob\_opt         & AllClockNets & AllClockNets  \\ \hline
-		{\bf Map properties} & &   \\ \hline
-		-power            & off  & Extra Effort   \\ 
-		-glob\_opt         & off  & off \\ \hline
+		Design goal                      & Balanced         & Minimum Runtime           \\ \hline
+		{\bf Synthesis properties}       &                  &                           \\ \hline
+		-opt\_mode                       & Speed            & Area                      \\
+		-op\_level                       & High             & High                      \\ 
+		-power                           & No               & Yes                       \\ 
+		-glob\_opt                       & AllClockNets     & AllClockNets              \\ \hline
+		{\bf Map properties}             &                  &                           \\ \hline
+		-power                           & Off              & Extra Effort              \\ 
+		-glob\_opt                       & Off              & Off                       \\ \hline
 	\end{tabular}
-	\caption{Settings for the best implementations.}
+	\caption{Settings for the best optimizations.}
 	\label{tab:set}
 \end{table}
+
+The first optimization we did was to bring out the maximum performance of our design.
+In the design goals \& strategies, we set the design goal to {\it Balanced}, and in the 
+synthesis properties we set the optimization mode to {\it Speed}, the optimization level to
+{\it High} and unchecked everything that tried to save power. For the clock, we started with
+the timing constraint set at 7 ns and lowered it further and further until the clock
+frequency was no longer improving. Then we lowered the time constraint a little bit
+more to see if lowered the clock period, but with no improvement. Our best clock
+frequency, at 198.491 MHz, was achieved when meeting the timing constraint set at
+5.1 ns. The critical path for this synthesis was between the fetch/decode and flag
+registers. In Table~\ref{tab:set} is a summary of the settings used for the best
+synthesises.
+
+For our next optimization test we set the design goal to {\it Area reduction}. In the
+synthesis properties we set optimization mode to {\it Area} and the optimization level to
+{\it Normal}. We did not use any power saving options. We did manage to reduce the area
+used quite a bit compared to the performance optimization. 
+
+For the power optimization we set the design goal to {\it Power optimization}. In the 
+synthesis properties we set optimization mode to {\it Area}, the optimization level to
+{\it High} and power reduction to {\it Yes}. This configuration yielded less power
+consumption than the previous optimizations. We found that the most power hungry module
+across all implementations was the ALU, followed by FE.
+
+The first optimization for performance was our most powerful synthesis, but when we
+tried to maximize efficiency in the final optimization we ended up with a result that
+was not only the most efficient yet, but also had less area usage than the area
+optimization and less power consumption than the power optimization. For this reason
+we ended up with only two different configurations. One optimized for performance and
+one for everything else. We achieved this result by, in the design goal \& strategies,
+setting the design goal to {\it Minimum Runtime}. Then in the synthesis properties we
+set optimization mode to {\it Area}, the optimization level to {\it High} and power
+reduction to {\it Yes}. Finally in the map properties we set the power optimization to
+{\it Extra Effort} and the global optimization to {\it Power}. The critical path in
+this configuration was from the state regiter in the controller to the flag register,
+which differs from the critical path in the other implementation.
+
+
 
 \section{Analysis}
 
@@ -328,7 +359,7 @@ got, where one of them was a latch that was created in the FSM. When testing
 the processor on the Nexys board, it worked (more or less) on the first try.
 
 What we learned about synthesizing a design was that there is more to a
-processor than it's implementation alone. The synthesis gives control to how
+processor than its implementation alone. The synthesis gives control to how
 the design should be implemented on a circuit, by adjusting it for performance,
 area usage or power consumption. While we for the most part learned about
 designing a processor from scratch, we also got an insight of how processors
